@@ -106,7 +106,7 @@ Key hyperparameters (fully configurable):
 - TensorBoard
 
 Install dependencies:
-```bash
+
 
 ▶️ Training
 
