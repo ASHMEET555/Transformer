@@ -35,101 +35,103 @@ This project performs **Neural Machine Translation (NMT)** for **English → Ita
 ├── inference.ipynb           # Interactive translation testing
 ├── README.md                 # Project documentation
 └── opus_books_weights/       # Model checkpoints (auto-generated)
+```
+---
 
-🏗️ Architecture Deep Dive
-1️⃣ Transformer Model (model.py)
+## 🏗️ Architecture Deep Dive
 
-Multi-Head Attention (MHA)
-Implements scaled dot-product attention across multiple heads to capture diverse linguistic relationships.
+### 1️⃣ Transformer Model (`model.py`)
 
-Positional Encoding
-Fixed sinusoidal positional encodings to inject sequence order information.
+#### 🔹 Multi-Head Attention (MHA)
+Implements **scaled dot-product attention** across multiple heads to capture diverse syntactic and semantic relationships in language.
 
-Feed-Forward Network (FFN)
-Position-wise fully connected layers with ReLU activation.
+#### 🔹 Positional Encoding
+Uses **fixed sinusoidal positional encodings** to inject word order information without introducing additional learned parameters.
 
-Residual Connections & Layer Normalization
-Standard Add & Norm blocks for stable deep training.
+#### 🔹 Feed-Forward Network (FFN)
+Position-wise fully connected layers with **ReLU activation**, applied independently to each token representation.
 
-Encoder–Decoder Stack
+#### 🔹 Residual Connections & Layer Normalization
+Standard **Add & Norm** blocks ensure stable gradient flow and efficient deep training.
 
-Encoder: 6 stacked layers
+#### 🔹 Encoder–Decoder Stack
+- **Encoder:** 6 stacked layers for source sentence encoding  
+- **Decoder:** 6 stacked layers for autoregressive target generation  
+- **Cross-Attention:** Enables the decoder to attend over encoded source representations  
 
-Decoder: 6 stacked layers
+---
 
-Cross-attention between source and target sequences
+### 2️⃣ Data Pipeline (`dataset.py`)
 
-2️⃣ Data Pipeline (dataset.py)
+#### 🔹 BilingualDataset
+- Converts raw English–Italian sentence pairs into tokenized tensors  
+- Pads or truncates sequences to a fixed maximum length  
 
-BilingualDataset
+#### 🔹 Causal Masking
+- Prevents the decoder from attending to future tokens  
+- Preserves the autoregressive decoding property  
 
-Converts sentence pairs into tokenized tensors
+#### 🔹 Special Token Handling
+Automatically manages:
+- `[SOS]` — Start of sentence  
+- `[EOS]` — End of sentence  
+- `[PAD]` — Padding token  
 
-Pads/truncates to fixed sequence length
+---
 
-Causal Masking
+## ⚙️ Configuration (`config.py`)
 
-Prevents the decoder from attending to future tokens
+Key hyperparameters (fully configurable):
 
-Preserves autoregressive generation
+| Parameter         | Value |
+|-------------------|-------|
+| Batch Size        | 32    |
+| Sequence Length   | 128   |
+| d_model           | 512   |
+| Learning Rate     | 1e-4  |
+| Label Smoothing   | 0.1   |
+| Encoder Layers    | 6     |
+| Decoder Layers    | 6     |
 
-Special Token Handling
+---
 
-[SOS], [EOS], [PAD] handled automatically
+## 🧪 Training & Evaluation
 
-⚙️ Configuration (config.py)
-
-Key hyperparameters (easily adjustable):
-
-Parameter	Value
-Batch Size	32
-Sequence Length	128
-d_model	512
-Learning Rate	1e-4
-Label Smoothing	0.1
-Encoder Layers	6
-Decoder Layers	6
-🧪 Training & Evaluation
-📦 Prerequisites
-
-Python 3.10+
-
-PyTorch
-
-Hugging Face datasets & tokenizers
-
-torchmetrics
-
-tqdm
-
-TensorBoard
+### 📦 Prerequisites
+- Python **3.10+**
+- PyTorch
+- Hugging Face `datasets` & `tokenizers`
+- `torchmetrics`
+- `tqdm`
+- TensorBoard
 
 Install dependencies:
+```bash
 
-pip install torch datasets tokenizers torchmetrics tqdm tensorboard
 ▶️ Training
 
 Start training from scratch or resume from the latest checkpoint:
 
 python train.py
 
-The script automatically detects:
+The training script automatically detects and utilizes:
 
-✅ CUDA (NVIDIA GPUs)
+CUDA (NVIDIA GPUs)
 
-✅ MPS (Apple Silicon)
+MPS (Apple Silicon)
 
-✅ CPU fallback
+CPU fallback
 
 📊 Monitoring & Metrics
+🔹 TensorBoard Integration
 
-TensorBoard Integration
+Training loss
 
-Training & validation loss
+Validation loss
 
 Evaluation metrics per epoch
 
-Automated Validation Metrics
+🔹 Evaluation Metrics
 
 BLEU Score
 
@@ -138,26 +140,25 @@ Word Error Rate (WER)
 Character Error Rate (CER)
 
 👁️ Visualization & Inference
+🔹 attention_visual.ipynb
 
-attention_visual.ipynb
+Visualize attention weights across layers and heads for interpretability.
 
-Visualize attention maps across heads and layers
+🔹 inference.ipynb
 
-inference.ipynb
-
-Interactive notebook for real-time translation testing
+Interactive notebook for real-time translation testing.
 
 💾 Checkpointing
 
-Saves:
+The training pipeline automatically saves:
 
 Model weights
 
 Optimizer state
 
-Training epoch
+Current training epoch
 
-Enables seamless training resume
+This enables seamless resumption of training.
 
 📚 Dataset
 
@@ -165,15 +166,15 @@ OPUS Books Dataset
 
 Clean, parallel English–Italian sentence pairs
 
-Ideal for sentence-level translation tasks
+Suitable for sentence-level neural machine translation
 
 🧠 Learning Objectives
 
-This project is ideal if you want to:
+This project is designed to help you:
 
-Understand Transformers at a mathematical & implementation level
+Understand Transformers at a mathematical and implementation level
 
-Build NMT systems without high-level abstractions
+Build NMT systems without relying on high-level abstractions
 
 Explore attention mechanisms visually
 
@@ -185,11 +186,11 @@ Beam search decoding
 
 Byte-Pair Encoding (BPE)
 
-Transformer variants (Pre-LN, RoPE, etc.)
+Transformer variants (Pre-LN, RoPE)
 
 Mixed precision training
 
-Multi-GPU training support
+Multi-GPU / Distributed training
 
 📄 References
 
@@ -203,3 +204,5 @@ PyTorch Documentation
 
 Inspired by the original Transformer paper and modern NLP research.
 Built with a focus on clarity, correctness, and learning.
+
+If you find this project useful, consider starring ⭐ the repository!
